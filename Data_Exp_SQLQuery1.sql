@@ -143,3 +143,6 @@ JOIN Covid_Data_Exploration..Covid_Vaccinations$ vac
 WHERE dea.continent is not null
 --ORDER BY 2,3 ;
 
+SELECT * 
+FROM PercentPopulationVaccinated
+
