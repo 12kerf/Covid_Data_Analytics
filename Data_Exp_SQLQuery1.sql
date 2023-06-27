@@ -143,6 +143,48 @@ JOIN Covid_Data_Exploration..Covid_Vaccinations$ vac
 WHERE dea.continent is not null
 --ORDER BY 2,3 ;
 
-SELECT * 
-FROM PercentPopulationVaccinated
 
+
+
+
+
+
+--1
+SELECT SUM(new_cases) as TotalCases, SUM(new_deaths) as TotalDeaths, SUM(new_deaths)/Sum(new_cases)*100 as DeathPercentage
+--INTO Covid_Data_Exploration..DeathPercentage
+FROM Covid_Data_Exploration..Covid_Deaths$
+WHERE continent IS NOT NULL 
+ORDER BY 1,2 ;
+
+--2
+Select location, SUM(cast(new_deaths as int)) as TotalDeathCount
+--INTO Covid_Data_Exploration..TotalDeathCount
+From Covid_Data_Exploration..Covid_Deaths$
+--Where location = 'India'
+Where continent is null 
+and location not in ('World', 'European Union', 'International', 'High income', 'Upper middle income', 'Lower middle income', 'Low income')
+Group by location
+order by TotalDeathCount desc
+
+--3
+Select Location, Population, MAX(total_cases) as HighestInfectionCount,  Max((total_cases/population))*100 as PercentPopulationInfected
+--INTO Covid_Data_Exploration..TotalCases
+From Covid_Data_Exploration..Covid_Deaths$
+--Where location = 'India'
+Group by Location, Population
+order by PercentPopulationInfected desc
+
+--4
+Select Location, Population,date, MAX(total_cases) as HighestInfectionCount,  Max((total_cases/population))*100 as PercentPopulationInfected
+--INTO Covid_Data_Exploration..PercentPopulationInfected
+From Covid_Data_Exploration..Covid_Deaths$
+--Where location = 'India'
+Group by Location, Population, date
+order by PercentPopulationInfected desc
+
+
+
+select * from DeathPercentage
+select * from PercentPopulationInfected 
+select * from TotalDeathCount
+select * from TotalCases
